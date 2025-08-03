@@ -1,5 +1,8 @@
+"""Lexer class to break input string into tokens"""
+
+
 class Lexer:
-    """Lexer nneds to keep track of the current position in the input
+    """Lexer needs to keep track of the current position in the input
     string and characters at that position"""
 
     def __init__(self, source):
