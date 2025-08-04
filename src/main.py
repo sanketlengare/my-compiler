@@ -14,7 +14,7 @@ def main():
     #     print(lexer.cur_char)
     #     lexer.next_char()
 
-    source = "123 1.23"
+    source = "123 f"
     lexer = Lexer(source=source)
 
     token = lexer.get_token()

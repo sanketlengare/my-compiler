@@ -142,6 +142,20 @@ class Lexer:
                 token_text = self.source[start_pos : self.cur_pos + 1]
                 token = Token(token_text, TokenType.INTEGER)
 
+        elif self.cur_char.isalpha():
+            start_pos = self.cur_pos
+
+            while self.peek().isalnum():
+                self.next_char()
+
+            token_text = self.source[start_pos : self.cur_pos + 1]
+            keyword = Token.check_if_keyword(token_text)
+
+            if keyword is None:
+                token = Token(token_text, TokenType.IDENT)
+            else:
+                token = Token(token_text, keyword)
+
         else:
             self.abort("Unknown token: " + self.cur_char)
             return

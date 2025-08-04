@@ -21,9 +21,10 @@ class TokenType(enum.Enum):
     LET = 105
     IF = 106
     THEN = 107
-    ENDIF = 108
-    WHILE = 109
-    REPEAT = 110
+    ELSE = 108
+    ENDIF = 109
+    WHILE = 110
+    REPEAT = 111
 
     # OPERATORS
     EQ = 201
