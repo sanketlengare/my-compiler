@@ -1,6 +1,6 @@
 """Class defines a token object"""
 
-from token_type import TokenType
+from .token_type import TokenType
 
 
 class Token:

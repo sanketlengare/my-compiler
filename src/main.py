@@ -1,7 +1,7 @@
 """This module is the starting point of my compiler"""
 
-from lex import Lexer
-from token_type import TokenType
+from .lex import Lexer
+from .token_type import TokenType
 
 
 def main():
@@ -14,7 +14,7 @@ def main():
     #     print(lexer.cur_char)
     #     lexer.next_char()
 
-    source = "123 f"
+    source = "H"
     lexer = Lexer(source=source)
 
     token = lexer.get_token()

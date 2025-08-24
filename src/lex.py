@@ -1,8 +1,9 @@
 """Lexer class to break input string into tokens"""
 
 import sys
-from string_token import Token
-from token_type import TokenType
+
+from .string_token import Token
+from .token_type import TokenType
 
 
 class Lexer:
