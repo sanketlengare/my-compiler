@@ -22,7 +22,7 @@ class Lexer:
         """Process the next character"""
 
         self.cur_pos += 1
-        if self.cur_pos + 1 >= len(self.source):
+        if self.cur_pos >= len(self.source):
             self.cur_char = "\0"  # EOF
         else:
             self.cur_char = self.source[self.cur_pos]

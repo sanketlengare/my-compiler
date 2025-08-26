@@ -2,8 +2,8 @@
 
 import unittest
 
-from src.lex import Lexer
 from src.token_type import TokenType
+from src.lex import Lexer
 
 
 class TestLex(unittest.TestCase):
@@ -28,3 +28,12 @@ class TestLex(unittest.TestCase):
         lexer = Lexer(source="H")
         self.assertEqual(lexer.cur_char, "H")
         self.assertEqual(lexer.peek(), "\n")
+
+    def test_get_token(self):
+        """Test for right token recognition"""
+
+        lexer = Lexer(source="IF")
+        token = lexer.get_token()
+        print(token)
+        if token is not None:
+            self.assertEqual(token.kind, TokenType.IF)

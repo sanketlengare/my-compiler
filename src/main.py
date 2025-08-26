@@ -1,26 +1,26 @@
 """This module is the starting point of my compiler"""
 
-from .lex import Lexer
-from .token_type import TokenType
+import sys
+from src.lex import Lexer
+from src.parse import Parser
 
 
 def main():
     """Runs the compiler"""
 
-    # source = "LEF foobar = 123"
-    # lexer = Lexer(source=source)
+    print("My compiler")
 
-    # while lexer.peek() != "\0":
-    #     print(lexer.cur_char)
-    #     lexer.next_char()
+    if len(sys.argv) != 2:
+        sys.exit("Error: Compiler needs source file as argument.")
 
-    source = "H"
-    lexer = Lexer(source=source)
+    with open(sys.argv[1], "r", encoding="utf-8") as input_file:
+        source = input_file.read()
 
-    token = lexer.get_token()
-    while token is not None and token.kind != TokenType.EOF:
-        print(token.kind)
-        token = lexer.get_token()
+    lexer = Lexer(source)
+    parser = Parser(lexer)
+
+    parser.program()
+    print("Parsing completed.")
 
 
 main()
