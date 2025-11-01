@@ -91,6 +91,8 @@ class Lexer:
             if self.peek() == char_next:
                 self.next_char()
                 token = Token(self.cur_char + char_next, TokenType.LTEQ)
+            else:
+                token = Token(self.cur_char, TokenType.LT)
 
         elif self.cur_char == ">":
             char_next = "="
@@ -98,7 +100,7 @@ class Lexer:
                 self.next_char()
                 token = Token(self.cur_char + char_next, TokenType.GTEQ)
             else:
-                token = Token(self.cur_char, TokenType.LT)
+                token = Token(self.cur_char, TokenType.GT)
 
         elif self.cur_char == "!":
             char_next = "="
@@ -131,7 +133,7 @@ class Lexer:
                 self.next_char()
 
                 if not self.peek().isdigit():
-                    self.abort("Illegal character in number")
+                    self.abort("Illegal character in integer")
 
                 while self.peek().isdigit():
                     self.next_char()

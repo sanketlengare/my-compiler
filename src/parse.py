@@ -3,7 +3,6 @@
 import sys
 
 from .token_type import TokenType
-from .lex import Lexer
 
 
 class Parser:
@@ -56,6 +55,81 @@ class Parser:
         while self.check_token(TokenType.NEWLINE):
             self.next_token()
 
+    def primary(self):
+        """primary ::= integer : ident"""
+
+        if self.curr_token is not None:
+            print("PRIMARY (" + self.curr_token.text + ")")
+
+        if self.check_token(TokenType.INTEGER):
+            self.next_token()
+        elif self.check_token(TokenType.IDENT):
+            self.next_token()
+        else:
+            if self.curr_token is not None:
+                self.abort("Unexpected token at " + self.curr_token.text)
+
+    # Args : void
+    # Returns : void
+    def unary(self):
+        """unary ::= ["+" | "-"] primary"""
+
+        print("UNARY")
+
+        if self.check_token(TokenType.PLUS) or self.check_token(TokenType.MINUS):
+            self.next_token()
+        self.primary()
+
+    # Args : void
+    # Returns : void
+    def term(self):
+        """term ::= unary {( "/" | "*") unary}"""
+
+        print("TERM")
+
+        self.unary()
+        while self.check_token(TokenType.SLASH) or self.check_token(TokenType.ASTERISK):
+            self.next_token()
+            self.unary()
+
+    # Args : void
+    # Returns : void
+    def expression(self):
+        """expression ::= term {("+" | "-") term}"""
+
+        print("EXPRESSION")
+
+        self.term()
+        while self.check_token(TokenType.PLUS) or self.check_token(TokenType.MINUS):
+            self.next_token()
+            self.term()
+
+    def is_comparison_operator(self):
+        """Return true if the current token is a comparison operator"""
+
+        return (
+            self.check_token(TokenType.EQ)
+            or self.check_token(TokenType.NOTEQ)
+            or self.check_token(TokenType.GT)
+            or self.check_token(TokenType.GTEQ)
+            or self.check_token(TokenType.LT)
+            or self.check_token(TokenType.LTEQ)
+        )
+
+    def comparison(self):
+        """comparison ::= expression ((== | != | > | >= | < | <=) expression)"""
+
+        print("COMPARISON")
+
+        self.expression()
+        if self.is_comparison_operator():
+            self.next_token()
+            self.expression()
+
+        else:
+            if self.curr_token is not None:
+                self.abort("Expected comparison operator at " + self.curr_token.text)
+
     def statement(self):
         """Check the first tocken to see what kind of statement this is"""
 
@@ -68,8 +142,65 @@ class Parser:
                 self.next_token()
             else:
                 # Expect an expression
-                # self.expression()
-                print("expects an expression")
+                self.expression()
+
+        elif self.check_token(TokenType.IF):
+            print("IF-STATEMENT")
+            self.next_token()
+            self.comparison()
+
+            self.match(TokenType.THEN)
+            self.nl()
+
+            while not self.check_token(TokenType.ENDIF):
+                self.statement()
+
+            self.match(TokenType.ENDIF)
+
+        elif self.check_token(TokenType.WHILE):
+            print("STATEMENT-WHILE")
+            self.next_token()
+            self.comparison()
+
+            self.match(TokenType.REPEAT)
+            self.nl()
+
+            while not self.check_token(TokenType.ENDWHILE):
+                self.statement()
+
+            self.match(TokenType.ENDWHILE)
+
+        elif self.check_token(TokenType.LABEL):
+            print("STATEMENT-LABEL")
+            self.next_token()
+            self.match(TokenType.IDENT)
+
+        elif self.check_token(TokenType.GOTO):
+            print("STATEMENT-GOTO")
+            self.next_token()
+            self.match(TokenType.IDENT)
+
+        elif self.check_token(TokenType.LET):
+            print("STATEMENT-LET")
+            self.next_token()
+            self.match(TokenType.IDENT)
+            self.match(TokenType.EQ)
+            self.expression()
+
+        elif self.check_token(TokenType.INPUT):
+            print("STATEMET-INPUT")
+            self.next_token()
+            self.match(TokenType.IDENT)
+
+        else:
+            if self.curr_token is not None:
+                self.abort(
+                    "Invalid statement at "
+                    + self.curr_token.text
+                    + " ("
+                    + self.curr_token.kind.name
+                    + ")"
+                )
 
         self.nl()
 
@@ -77,6 +208,10 @@ class Parser:
         """Parses all the statements in the program"""
 
         print("PROGRAM")
+
+        # Handle newlines at the start of the input
+        while self.check_token(TokenType.NEWLINE):
+            self.next_token()
 
         while not self.check_token(TokenType.EOF):
             self.statement()
