@@ -1,6 +1,7 @@
 """This module is the starting point of my compiler"""
 
 import sys
+from src.emitter import Emitter
 from src.lex import Lexer
 from src.parse import Parser
 
@@ -17,9 +18,11 @@ def main():
         source = input_file.read()
 
     lexer = Lexer(source)
-    parser = Parser(lexer)
+    emitter = Emitter("out.c")
+    parser = Parser(lexer, emitter)
 
     parser.program()
+    emitter.write_file()
     print("Parsing completed.")
 
 

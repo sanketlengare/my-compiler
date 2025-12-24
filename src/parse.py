@@ -8,8 +8,13 @@ from .token_type import TokenType
 class Parser:
     """Parser object controls the lexer and request a new token as needed"""
 
-    def __init__(self, lexer):
+    def __init__(self, lexer, emitter):
         self.lexer = lexer
+        self.emitter = emitter
+
+        self.symbols = set()
+        self.labels_declared = set()
+        self.labels_gotoed = set()
 
         self.curr_token = None
         self.peek_token = None
@@ -64,6 +69,12 @@ class Parser:
         if self.check_token(TokenType.INTEGER):
             self.next_token()
         elif self.check_token(TokenType.IDENT):
+
+            if self.curr_token and self.curr_token.text not in self.symbols:
+                self.abort(
+                    "Referencing variable before assignment: " + self.curr_token.text
+                )
+
             self.next_token()
         else:
             if self.curr_token is not None:
@@ -173,16 +184,28 @@ class Parser:
         elif self.check_token(TokenType.LABEL):
             print("STATEMENT-LABEL")
             self.next_token()
+
+            if self.curr_token:
+                if self.curr_token.text in self.labels_declared:
+                    self.abort("Label already exists: " + self.curr_token.text)
+                self.labels_declared.add(self.curr_token.text)
+
             self.match(TokenType.IDENT)
 
         elif self.check_token(TokenType.GOTO):
             print("STATEMENT-GOTO")
             self.next_token()
+            if self.curr_token:
+                self.labels_gotoed.add(self.curr_token.text)
             self.match(TokenType.IDENT)
 
         elif self.check_token(TokenType.LET):
             print("STATEMENT-LET")
+
             self.next_token()
+            if self.curr_token and self.curr_token.text not in self.symbols:
+                self.symbols.add(self.curr_token.text)
+
             self.match(TokenType.IDENT)
             self.match(TokenType.EQ)
             self.expression()
@@ -190,6 +213,10 @@ class Parser:
         elif self.check_token(TokenType.INPUT):
             print("STATEMET-INPUT")
             self.next_token()
+
+            if self.curr_token and self.curr_token.text not in self.symbols:
+                self.symbols.add(self.curr_token.text)
+
             self.match(TokenType.IDENT)
 
         else:
@@ -215,6 +242,10 @@ class Parser:
 
         while not self.check_token(TokenType.EOF):
             self.statement()
+
+        for label in self.labels_gotoed:
+            if label not in self.labels_declared:
+                self.abort("GOTO label undeclared: " + label)
 
     def abort(self, message):
         """Handle errors"""
