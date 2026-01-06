@@ -1,6 +1,7 @@
 """This module is the starting point of my compiler"""
 
 import sys
+import json
 from src.emitter import Emitter
 from src.lex import Lexer
 from src.parse import Parser
@@ -18,11 +19,15 @@ def main():
         source = input_file.read()
 
     lexer = Lexer(source)
-    emitter = Emitter("out.c")
-    parser = Parser(lexer, emitter)
+    parser = Parser(lexer)
 
-    parser.program()
-    emitter.write_file()
+    # parser.program()
+    tree = parser.program()
+    json_output = tree.to_dict()
+
+    with open("ast.json", "w") as output_file:
+        json.dump(json_output, output_file, indent=4)
+
     print("Parsing completed.")
 
 

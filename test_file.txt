@@ -2,7 +2,7 @@ PRINT "How many fibonacci numbers do you want?"
 INPUT nums
 PRINT ""
 
-LET a = 0
+LET a = 0.1
 LET b = 1
 WHILE nums > 0 REPEAT
     PRINT a
