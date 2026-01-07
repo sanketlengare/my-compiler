@@ -152,26 +152,26 @@ class Label(AST):
     """Represents a Label token"""
 
     def __init__(self, token):
-        self.token = token
+        self.value = token
 
     def to_dict(self):
-        return {"type": "Label", "value": self.token.text}
+        return {"type": "Label", "value": self.value.text}
 
     def __repr__(self):
-        return f"Label({self.token.text})"
+        return f"Label({self.value.text})"
 
 
 class Goto(AST):
     """Represents a Goto token"""
 
     def __init__(self, token):
-        self.token = token
+        self.value = token
 
     def to_dict(self):
-        return {"type": "Goto", "value": self.token.text}
+        return {"type": "Goto", "value": self.value.text}
 
     def __repr__(self):
-        return f"Goto({self.token.text})"
+        return f"Goto({self.value.text})"
 
 
 class If(AST):

@@ -2,7 +2,7 @@
 
 import sys
 import json
-from src.emitter import Emitter
+from src.code_gen import CodeGenerator
 from src.lex import Lexer
 from src.parse import Parser
 
@@ -20,13 +20,18 @@ def main():
 
     lexer = Lexer(source)
     parser = Parser(lexer)
+    code_generator = CodeGenerator()
 
     # parser.program()
     tree = parser.program()
     json_output = tree.to_dict()
+    c_output = code_generator.generate(tree)
 
     with open("ast.json", "w") as output_file:
         json.dump(json_output, output_file, indent=4)
+
+    with open("out.c", "w") as file:
+        file.write(c_output)
 
     print("Parsing completed.")
 
