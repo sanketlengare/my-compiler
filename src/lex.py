@@ -37,7 +37,7 @@ class Lexer:
     def abort(self, message):
         """Invalid token found, print error message and exit."""
 
-        sys.exit("Lexing error. " + message)
+        raise Exception("Error: " + message)
 
     def skip_whitespace(self):
         """Skip whitespace except newlines, which we will use to indicate the end of a statement"""

@@ -322,4 +322,4 @@ class Parser:
     def abort(self, message):
         """Handle errors"""
 
-        sys.exit("Error: " + message)
+        raise Exception("Error: " + message)
