@@ -1,5 +1,6 @@
 """Represents server"""
 
+import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -41,4 +42,6 @@ def compile_code():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    # Use the PORT provided by the cloud, or default to 5000 locally
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)

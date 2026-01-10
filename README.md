@@ -27,14 +27,3 @@ A full-stack language toolchain that compiles a custom high-level syntax into op
 * **Frontend:** React, TypeScript, Lucide Icons
 * **Visualization:** D3.js
 
-## 📦 How to Run
-
-### 1. Start the Compiler API (Backend)
-```bash
-# Navigate to root
-python3 -m venv venv
-source venv/bin/activate
-pip install flask flask-cors
-
-python server.py
-# Server running on [http://127.0.0.1:5000](http://127.0.0.1:5000)
