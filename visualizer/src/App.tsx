@@ -35,7 +35,7 @@ function App() {
     setError("");
     setAstData(null); // Clear tree for dramatic effect
 
-    const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000';
+    const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5050';
 
     try {
       // Simulate network delay for "processing" feel
@@ -156,6 +156,7 @@ function App() {
                   separation={{ siblings: 1,nonSiblings: 1.5 }}
                   nodeSize={{ x: 200,y: 150 }}
                   zoomable={true}
+                  pathClassFunc={() => 'tree-link'}
                 />
               ) : (
                 <div className="empty-state">
