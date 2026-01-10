@@ -6,7 +6,7 @@
 
 A full-stack language toolchain that compiles a custom high-level syntax into optimized C code. It features a handwritten recursive descent parser in Python and a real-time Abstract Syntax Tree (AST) visualizer built with React and D3.js.
 
-![Project Demo](https://pytoc-my-compiler.vercel.app/)
+[Project Demo](https://pytoc-my-compiler.vercel.app/)
 ## 🚀 Features
 
 ### The Compiler (Backend)
