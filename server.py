@@ -9,7 +9,7 @@ from src.lex import Lexer
 from src.parse import Parser
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 @app.route("/compile", methods=["POST"])
